@@ -1309,9 +1309,15 @@ h1 {
 .google-form {
   width: 100%;
   min-width: 0;
-  height: 1906px;
+  height: 2400px;
   border: 0;
   padding-top: 8px;
+}
+
+@media (max-width: 700px) {
+  .google-form {
+    height: 2700px;
+  }
 }
 
 .contact-form-column {

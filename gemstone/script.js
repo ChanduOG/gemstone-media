@@ -2,6 +2,7 @@
   const FRAME_COUNT = 101;
   const START_FRAME = 1;
   const EASING = 0.32;
+  const AUTOPLAY_DURATION = 5000;
   const PRELOAD_CONCURRENCY = 8;
 
   const hero = document.querySelector("#hero");
@@ -98,6 +99,8 @@
   const frames = new Array(FRAME_COUNT).fill(null);
   let targetFrame = START_FRAME;
   let currentFrame = targetFrame;
+  let autoplayStartedAt = 0;
+  let isAutoplaying = !reducedMotion.matches && window.scrollY < 1 && (!window.location.hash || window.location.hash === "#hero");
   let lastDrawnFrame = -1;
   let loadedCount = 0;
   let settledCount = 0;
@@ -132,9 +135,10 @@
     }
     updateProgress();
 
-    if (!isReady && (loadedCount >= 8 || settledCount === FRAME_COUNT)) {
+    if (!isReady && (loadedCount >= 2 || settledCount === FRAME_COUNT)) {
       isReady = true;
       currentFrame = targetFrame;
+      if (isAutoplaying) autoplayStartedAt = performance.now();
       canvas.classList.remove("is-hidden");
       loading.classList.add("is-hidden");
       if (reducedMotion.matches) {
@@ -149,13 +153,8 @@
     return new Promise((resolve) => {
       const image = new Image();
       image.decoding = "async";
-      image.onload = async () => {
-        try {
-          if (typeof image.decode === "function") await image.decode();
-          settle(index, image);
-        } catch {
-          settle(index, null);
-        }
+      image.onload = () => {
+        settle(index, image);
         resolve();
       };
       image.onerror = () => {
@@ -232,6 +231,12 @@
   function drawLoop() {
     animationFrameId = 0;
     if (!reducedMotion.matches) {
+      if (isAutoplaying) {
+        const progress = Math.min((performance.now() - autoplayStartedAt) / AUTOPLAY_DURATION, 1);
+        targetFrame = START_FRAME + progress * (FRAME_COUNT - START_FRAME);
+        if (progress === 1) isAutoplaying = false;
+      }
+
       currentFrame += (targetFrame - currentFrame) * EASING;
       if (Math.abs(targetFrame - currentFrame) < 0.015) currentFrame = targetFrame;
     }
@@ -248,6 +253,7 @@
 
   function updateTargetFrame() {
     if (reducedMotion.matches) return;
+    if (isAutoplaying && window.scrollY > 0) isAutoplaying = false;
     const scrollableDistance = hero.offsetHeight - window.innerHeight;
     const progress = scrollableDistance > 0
       ? Math.max(0, Math.min(1, -hero.getBoundingClientRect().top / scrollableDistance))
@@ -257,6 +263,7 @@
 
   function handleMotionPreferenceChange(event) {
     if (event.matches) {
+      isAutoplaying = false;
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       animationFrameId = 0;
       hero.classList.remove("is-scrollable");
@@ -272,6 +279,8 @@
       }
     } else {
       hero.classList.add("is-scrollable");
+      isAutoplaying = window.scrollY < 1 && (!window.location.hash || window.location.hash === "#hero");
+      if (isReady && isAutoplaying) autoplayStartedAt = performance.now();
       updateTargetFrame();
       startPreloading();
       if (isReady) scheduleDrawLoop();
