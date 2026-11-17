@@ -431,6 +431,47 @@ html.lenis body {
   }
 }
 
+/* ---------- Footer credit ---------- */
+.footer-bottom {
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  padding-bottom: 76px; /* room for the WhatsApp button */
+}
+
+.policy-credit {
+  margin: 8px 0 0;
+  color: rgba(243, 240, 233, 0.55);
+  font-size: 10px;
+}
+
+.policy-footer .policy-credit a {
+  display: inline;
+  min-height: 0;
+}
+
+.policy-footer .policy-credit a,
+.footer-bottom .footer-credit a {
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: underline;
+  text-decoration-color: rgba(201, 173, 122, 0.4);
+  text-underline-offset: 4px;
+}
+
+.policy-footer .policy-credit a:hover,
+.footer-bottom .footer-credit a:hover {
+  color: #e1c99b;
+  text-decoration-color: currentColor;
+}
+
+@media (max-width: 700px) {
+  .footer-credit {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+
 /* ---------- WhatsApp button ---------- */
 .whatsapp-fab {
   position: fixed;

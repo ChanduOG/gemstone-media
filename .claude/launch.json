@@ -4,8 +4,30 @@
     {
       "name": "gemstone",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "4610", "--bind", "127.0.0.1", "--directory", "."],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4610",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "."
+      ],
       "port": 4610
+    },
+    {
+      "name": "gemstone-siteroot",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4611",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "gemstone"
+      ],
+      "port": 4611
     }
   ]
 }
