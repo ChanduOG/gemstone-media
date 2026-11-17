@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "gemstone",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "4610", "--bind", "127.0.0.1", "--directory", "."],
+      "port": 4610
+    }
+  ]
+}

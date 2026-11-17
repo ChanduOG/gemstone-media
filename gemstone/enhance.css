@@ -1,0 +1,518 @@
+/* ==========================================================================
+   Gemstone Media: founder hero, smooth scroll and polish.
+   Loaded after styles.css so it only overrides what it needs to.
+   ========================================================================== */
+
+/* ---------- Smooth scroll (Lenis) ---------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ---------- Page scroll progress ---------- */
+.scroll-progress {
+  position: fixed;
+  z-index: 30;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 2px;
+  pointer-events: none;
+}
+
+.scroll-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(201, 173, 122, 0.4), var(--gold) 60%, #e9d4a8);
+  transform: scaleX(var(--page-progress, 0));
+  transform-origin: 0 50%;
+}
+
+/* ---------- Founder hero ---------- */
+.hero.is-scrollable {
+  height: 420vh;
+  height: 420svh;
+}
+
+.hero .stage {
+  background:
+    radial-gradient(ellipse 60% 70% at 72% 52%, rgba(201, 173, 122, 0.07), transparent 70%),
+    var(--charcoal);
+}
+
+.hero-glow {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--gem-cx, 72%) var(--gem-cy, 52%), rgba(201, 173, 122, 0.16), transparent 34%);
+  opacity: calc(1 - var(--e, 0));
+}
+
+.hero-photo {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  will-change: clip-path;
+}
+
+.hero-photo__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 47% 45%;
+}
+
+.hero.is-live .hero-photo__img {
+  width: 1200px;
+  height: 1484px;
+  object-fit: fill;
+  transform-origin: 0 0;
+  will-change: transform;
+  filter: saturate(0.92) contrast(1.04);
+}
+
+/* A slow light glint across the stone while it is still a gem. */
+.hero-photo::after {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 244, 220, 0.18) 48%, rgba(255, 244, 220, 0.04) 54%, transparent 62%);
+  opacity: calc(1 - var(--e, 0));
+  transform: translate3d(-60%, 0, 0);
+  content: "";
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero.is-live .hero-photo::after {
+    animation: gem-glint 6.5s cubic-bezier(0.45, 0, 0.2, 1) 1.2s infinite;
+  }
+}
+
+@keyframes gem-glint {
+  0% { transform: translate3d(-60%, 0, 0); }
+  45%, 100% { transform: translate3d(60%, 0, 0); }
+}
+
+.hero-shade {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--shade, 0);
+  background: linear-gradient(0deg, rgba(16, 16, 15, 0.92) 0%, rgba(16, 16, 15, 0.6) 34%, transparent 62%);
+}
+
+.hero-facets {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: calc((1 - var(--e, 0)) * 0.95);
+}
+
+.hero-facets polygon,
+.hero-facets line {
+  fill: none;
+  stroke: var(--gold);
+  vector-effect: non-scaling-stroke;
+}
+
+.hero-facets__outer {
+  stroke-width: 1.4;
+}
+
+.hero-facets__inner {
+  stroke-width: 1;
+  stroke-opacity: 0.55;
+}
+
+.hero-facets__rays line {
+  stroke-width: 1;
+  stroke-opacity: 0.4;
+}
+
+.hero .hero-copy {
+  z-index: 4;
+  top: 50%;
+  left: max(var(--page-gutter), calc(env(safe-area-inset-left) + 16px));
+  width: min(560px, 46vw);
+  text-align: left;
+  transform: translate3d(0, calc(-50% + var(--copy-y, 0px)), 0);
+  opacity: var(--copy-o, 1);
+  will-change: transform, opacity;
+}
+
+.hero .hero-copy .actions {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+}
+
+.hero h1 {
+  font-size: clamp(64px, 7.4vw, 112px);
+}
+
+.hero .eyebrow {
+  letter-spacing: 0.14em;
+}
+
+.hero-letter {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  left: max(var(--page-gutter), calc(env(safe-area-inset-left) + 16px));
+  width: min(560px, calc(42vw - var(--page-gutter)));
+  margin: 0;
+  opacity: var(--letter-o, 0);
+  transform: translate3d(0, calc(-50% + var(--letter-y, 24px)), 0);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.hero-letter.is-active {
+  pointer-events: auto;
+}
+
+.hero-letter blockquote {
+  position: relative;
+  margin: 0;
+}
+
+.hero-letter blockquote::before {
+  position: absolute;
+  top: -0.42em;
+  left: -0.06em;
+  color: var(--gold);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 120px;
+  line-height: 1;
+  opacity: 0.5;
+  content: "\201C";
+}
+
+.hero-letter .intro {
+  max-width: none;
+  margin: 0;
+  padding-top: 52px;
+  color: rgba(243, 240, 233, 0.86);
+  font-size: clamp(14px, 1.08vw, 16px);
+  line-height: 1.8;
+  text-align: left;
+  text-shadow: none;
+}
+
+.hero-letter figcaption {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 26px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-letter__rule {
+  width: 38px;
+  height: 1px;
+  background: currentColor;
+}
+
+/* Without JavaScript: a plain, readable composition. */
+.hero:not(.is-live) .stage {
+  position: relative;
+  display: flex;
+  height: auto;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: center;
+  gap: 48px;
+  padding: 120px max(var(--page-gutter), 16px) 80px;
+}
+
+.hero:not(.is-live) .hero-shade {
+  opacity: 0.9;
+  background: rgba(16, 16, 15, 0.78);
+}
+
+.hero:not(.is-live) .hero-facets {
+  display: none;
+}
+
+.hero:not(.is-live) .hero-copy,
+.hero:not(.is-live) .hero-letter {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: min(640px, 100%);
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 900px) {
+  .hero h1 {
+    font-size: clamp(54px, 8.4vw, 72px);
+  }
+
+  .hero .hero-copy {
+    width: min(420px, 44vw);
+  }
+
+  .hero-letter {
+    width: calc(44vw - var(--page-gutter));
+  }
+}
+
+@media (max-width: 700px) {
+  .hero.is-scrollable {
+    height: 480svh;
+  }
+
+  .hero .stage {
+    background: var(--charcoal);
+  }
+
+  .hero .hero-copy {
+    top: calc(env(safe-area-inset-top) + 68px + clamp(14px, 3svh, 28px));
+    right: max(var(--page-gutter), calc(env(safe-area-inset-right) + 16px));
+    left: max(var(--page-gutter), calc(env(safe-area-inset-left) + 16px));
+    width: auto;
+    transform: translate3d(0, var(--copy-y, 0px), 0);
+  }
+
+  .hero h1 {
+    font-size: clamp(40px, 12vw, 54px);
+  }
+
+  .hero-letter {
+    top: var(--letter-top, 42svh);
+    right: max(var(--page-gutter), calc(env(safe-area-inset-right) + 16px));
+    left: max(var(--page-gutter), calc(env(safe-area-inset-left) + 16px));
+    width: auto;
+    transform: translate3d(0, var(--letter-y, 24px), 0);
+  }
+
+  .hero-letter blockquote::before {
+    font-size: 84px;
+  }
+
+  .hero-letter .intro {
+    padding-top: 34px;
+    font-size: 13.5px;
+    line-height: 1.68;
+  }
+
+  .hero-letter figcaption {
+    margin-top: 18px;
+  }
+}
+
+@media (max-width: 900px) and (max-height: 500px) {
+  .hero .hero-copy {
+    top: 50%;
+    transform: translate3d(0, calc(-50% + var(--copy-y, 0px)), 0);
+  }
+
+  .hero h1 {
+    font-size: clamp(38px, 12svh, 52px);
+  }
+
+  .hero-letter .intro {
+    padding-top: 30px;
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .hero-letter blockquote::before {
+    font-size: 72px;
+  }
+}
+
+/* ---------- Scroll parallax on story images ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  [data-parallax] img {
+    transform: translate3d(0, var(--py, 0px), 0) scale(1.12);
+    will-change: transform;
+  }
+}
+
+/* ---------- Active navigation link ---------- */
+.site-links a {
+  position: relative;
+}
+
+.site-links a::after {
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+  left: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 260ms var(--motion-ease-out);
+  content: "";
+}
+
+.site-links a.is-current {
+  color: var(--ink);
+}
+
+.site-links a.is-current::after {
+  transform: scaleX(1);
+}
+
+@media (max-width: 700px) {
+  .site-links a::after {
+    display: none;
+  }
+
+  .site-links a.is-current {
+    color: var(--gold);
+  }
+}
+
+/* ---------- Social links in footer ---------- */
+.social-links {
+  grid-template-columns: repeat(3, max-content);
+  gap: 14px 12px;
+}
+
+.social-links a {
+  display: inline-grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(243, 240, 233, 0.18);
+  border-radius: 4px 12px 4px 12px;
+  color: rgba(243, 240, 233, 0.82);
+  transition: color 180ms var(--motion-ease-ui), border-color 180ms var(--motion-ease-ui), background-color 180ms var(--motion-ease-ui);
+}
+
+.social-links a svg {
+  width: 20px;
+  height: 20px;
+}
+
+.social-links a:hover {
+  border-color: var(--gold);
+  background: rgba(201, 173, 122, 0.1);
+  color: var(--gold);
+}
+
+@media (max-width: 700px) {
+  .social-links {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+/* ---------- WhatsApp button ---------- */
+.whatsapp-fab {
+  position: fixed;
+  z-index: 25;
+  right: max(20px, calc(env(safe-area-inset-right) + 16px));
+  bottom: max(20px, calc(env(safe-area-inset-bottom) + 16px));
+  display: inline-flex;
+  min-height: 56px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 0 16px;
+  border: 1px solid rgba(225, 201, 155, 0.9);
+  border-radius: 6px 20px 6px 20px;
+  background: var(--gold);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.42), 0 2px 6px rgba(0, 0, 0, 0.3);
+  color: #171512;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 180ms var(--motion-ease-ui), transform 220ms var(--motion-ease-out);
+}
+
+.whatsapp-fab svg {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+
+.whatsapp-fab::before {
+  position: absolute;
+  top: 9px;
+  left: 33px;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  background: #25d366;
+  content: "";
+  z-index: 1;
+}
+
+.whatsapp-fab:hover {
+  background: #e1c99b;
+  color: #171512;
+}
+
+.whatsapp-fab:active {
+  color: #171512;
+  transform: scale(0.97);
+}
+
+.whatsapp-fab:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+@media (max-width: 700px) {
+  .whatsapp-fab {
+    width: 56px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .whatsapp-fab::before {
+    left: 33px;
+  }
+
+  .whatsapp-fab__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-fab,
+  .site-links a::after {
+    transition: none;
+  }
+}
